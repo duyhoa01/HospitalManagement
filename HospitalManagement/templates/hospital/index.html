@@ -1,14 +1,19 @@
+{% extends 'hospital/base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+
+{% block css %}
     <link rel="stylesheet" href="{% static '/css/index_style.css' %}">
-</head>
-<body>
-    <h1>Index</h1>
-</body>
-</html>
+{% endblock %}
+
+
+{% block content %}
+
+    {% include 'hospital/navbar.html' %}
+
+{% endblock %}
+
+{% block js %}
+
+    <script src="{% static '/js/main.js' %}"></script> 
+
+{% endblock %}
