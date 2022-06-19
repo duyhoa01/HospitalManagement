@@ -110,7 +110,14 @@ def admin_dashboard_view(request):
     }
     return render(request,'hospital/admin_dashboard.html',context=mydict)
 
+
 @login_required(login_url='adminlogin')
 @user_passes_test(is_admin)
 def admin_doctor_view(request):
     return render(request,'hospital/admin_doctor.html')
+
+@login_required(login_url='adminlogin')
+@user_passes_test(is_admin)
+def admin_doctor_record_view(request):
+    dotors=models.Doctor.objects.all().filter(status=True)
+    return render(request,'hospital/admin_doctor_record.html',{'doctors':dotors})
