@@ -1,7 +1,7 @@
 from django import views
 from django.contrib import admin
 from django.urls import path,include
-from .views import home_view,doctor_signup_view,patient_signup_view,afterlogin_view
+from .views import *
 from django.contrib.auth.views import LoginView, LogoutView
 
 urlpatterns = [
@@ -13,4 +13,8 @@ urlpatterns = [
 
     path('afterlogin', afterlogin_view,name='afterlogin'),
     path('logout', LogoutView.as_view(template_name='hospital/index.html'),name='logout'),
+
+
+    path('admin-dashboard',admin_dashboard_view,name='admin-dashboard'),
+    path('admin-doctor', admin_doctor_view,name='admin-doctor'),
 ]
