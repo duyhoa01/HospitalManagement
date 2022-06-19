@@ -1,0 +1,44 @@
+{% extends 'hospital/base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static '/css/login_style.css' %}">
+{% endblock %}
+
+
+{% block content %}
+
+    <div class="center">
+        <h1>Login</h1>
+        <form method="post">
+        {% csrf_token %}
+        <div class="txt_field">
+            <!-- <input type="text" required>
+            <span></span>
+            <label>Username</label> -->
+            {% render_field form.username class="form-control" placeholder="Username" %}
+        </div>
+        <div class="txt_field">
+            <!-- <input type="password" required>
+            <span></span>
+            <label>Password</label> -->
+            {% render_field form.password class="form-control" placeholder="Password" %}
+        </div>
+        <div class="pass">Forgot Password?</div>
+        <input type="submit" value="Login">
+        <div class="signup_link">
+            Not a member? <a href="/patientsignup">Signup patient</a> <a href="/doctorsignup">Apply doctor</a>
+        </div>
+        </form>
+    </div>
+
+{% endblock %}
+
+{% block js %}
+
+    
+
+{% endblock %}
+
+

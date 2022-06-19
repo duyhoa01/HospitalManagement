@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'Hospital',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [
@@ -126,6 +127,8 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS=[STATIC_DIR,]
 
 MEDIA_ROOT=os.path.join(BASE_DIR,'static')
+
+LOGIN_REDIRECT_URL='/afterlogin'
 
 
 # Default primary key field type
