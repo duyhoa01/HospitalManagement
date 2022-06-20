@@ -18,4 +18,8 @@ urlpatterns = [
     path('admin-dashboard',admin_dashboard_view,name='admin-dashboard'),
     path('admin-doctor', admin_doctor_view,name='admin-doctor'),
     path('admin-doctor-record', admin_doctor_record_view,name='admin-record-doctor'),
+    path('admin-doctor-add', admin_doctor_add_view,name='admin_doctor_add_view'),
+    path('admin-doctor-approve', admin_doctor_approve_view,name='admin-doctor-approve'),
+    path('admin-approve-doctor/<int:pk>', admin_approve_doctor_view,name='admin-approve-doctor'),
+    path('admin-doctor-reject/<int:pk>',admin_reject_doctor_view,name='admin-doctor-reject'),
 ]
