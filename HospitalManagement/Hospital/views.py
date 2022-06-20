@@ -1,8 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required,user_passes_test
 from . import forms, models
 from django.contrib.auth.models import Group
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 
 # Create your views here.
 
@@ -29,6 +31,7 @@ def doctor_signup_view(request):
             doctor=doctorForm.save(commit=False)
             doctor.user=user
             doctor=doctor.save()
+           # print(doctor.profile_pic)
             my_doctor_group = Group.objects.get_or_create(name='DOCTOR')
             my_doctor_group[0].user_set.add(user)
         return HttpResponseRedirect('login')
@@ -87,8 +90,16 @@ def afterlogin_view(request):
 @login_required(login_url='adminlogin')
 @user_passes_test(is_admin)
 def admin_dashboard_view(request):
-    doctors=models.Doctor.objects.all().order_by('-id')
-    patients=models.Patient.objects.all().order_by('-id')
+    doctors=models.Doctor.objects.all().order_by('user__date_joined')
+    patients=models.Patient.objects.all().order_by('user__date_joined')
+    users=models.User.objects.all().order_by('-date_joined')
+    roles=[]
+    print(users.__len__())
+    for u in users:
+       roles.append(u.groups.all()[0].name)
+       if(u.groups.all()[0].name=='DOCTOR'):
+        print(u.doctor)
+    print(roles)
     #for three cards
     doctorcount=models.Doctor.objects.all().filter(status=True).count()
     pendingdoctorcount=models.Doctor.objects.all().filter(status=False).count()
@@ -99,6 +110,8 @@ def admin_dashboard_view(request):
     appointmentcount=models.Appointment.objects.all().filter(status=True).count()
     pendingappointmentcount=models.Appointment.objects.all().filter(status=False).count()
     mydict={
+    'roles':roles,
+    'users':users,
     'doctors':doctors,
     'patients':patients,
     'doctorcount':doctorcount,
@@ -119,5 +132,74 @@ def admin_doctor_view(request):
 @login_required(login_url='adminlogin')
 @user_passes_test(is_admin)
 def admin_doctor_record_view(request):
-    dotors=models.Doctor.objects.all().filter(status=True)
-    return render(request,'hospital/admin_doctor_record.html',{'doctors':dotors})
+    dotors=models.Doctor.objects.all().filter(status=True).order_by('department')
+    for d in dotors:
+        print(d.user)
+    paginator = Paginator(dotors, 4)
+  
+    pageNumber = request.GET.get('page')
+    print(pageNumber)
+    try:
+        print(0)
+        customers = paginator.page(pageNumber)
+    except PageNotAnInteger:
+        print(1)
+        customers = paginator.page(1)
+    except EmptyPage:
+        print(2)
+        customers = paginator.page(paginator.num_pages)
+    print(customers)
+    # for d in customers:
+    #     print(d.user)
+    return render(request, 'hospital/admin_doctor_record.html', {'doctors':customers})
+    
+
+@login_required(login_url='adminlogin')
+@user_passes_test(is_admin)
+def admin_doctor_add_view(request):
+    userForm=forms.DoctorUserForm()
+    doctorForm=forms.DoctorForm()
+    mydict={'userForm':userForm,'doctorForm':doctorForm}
+    if request.method=='POST':
+        userForm=forms.DoctorUserForm(request.POST)
+        doctorForm=forms.DoctorForm(request.POST, request.FILES)
+        if userForm.is_valid() and doctorForm.is_valid():
+            user=userForm.save()
+            user.set_password(user.password)
+            user.save()
+
+            doctor=doctorForm.save(commit=False)
+            doctor.user=user
+            doctor.status=True
+            doctor.save()
+
+            my_doctor_group = Group.objects.get_or_create(name='DOCTOR')
+            my_doctor_group[0].user_set.add(user)
+
+        return HttpResponseRedirect('admin-doctor-record')
+    return render(request,'hospital/admin_doctor_register.html',context=mydict)
+
+@login_required(login_url='adminlogin')
+@user_passes_test(is_admin)
+def admin_doctor_approve_view(request):
+    doctors=models.Doctor.objects.all().filter(status=False)
+    return render(request,'hospital/admin_doctor_approve.html',{'doctors':doctors})
+
+@login_required(login_url='adminlogin')
+@user_passes_test(is_admin)
+def admin_approve_doctor_view(request,pk):
+    doctor=models.Doctor.objects.get(id=pk)
+    doctor.status=True
+    doctor.save()
+    return redirect(reverse('admin-doctor-approve'))
+
+@login_required(login_url='adminlogin')
+@user_passes_test(is_admin)
+def admin_reject_doctor_view(request,pk):
+    doctor=models.Doctor.objects.get(id=pk)
+    user=models.User.objects.get(id=doctor.user_id)
+    user.delete()
+    doctor.delete()
+    return redirect('admin-doctor-approve')
+
+
