@@ -2,8 +2,6 @@
 {% load static %}
 
 
-
-
 {% block content %}
 
 <head>
@@ -225,15 +223,21 @@
 
             <div class="boxes">
                 <div class="box box1">
-                    <span class="text">Doctor Record</span>
+                    <a href="/admin-doctor-record?page=1">
+                        <span class="text">Doctor Record</span>
+                    </a>
                     <img src="{% static 'images/checklist.png' %}" width="50" height="50">  
                 </div>
-                <div class="box box2">          
-                    <span class="text">Register Doctor</span>
+                <div class="box box2">  
+                    <a href="/admin-doctor-add">
+                        <span class="text">Register Doctor</span>
+                    </a>        
                     <img src="{% static 'images/add-doctor.png' %}" width="50" height="50">
                 </div>
                 <div class="box box3">
-                    <span class="text">Approve Doctor</span>
+                    <a href="/admin-doctor-approve">
+                        <span class="text">Approve Doctor</span>
+                    </a>
                     <img src="{% static 'images/registered.png' %}" width="50" height="50">
                 </div>
                 <div class="box box4">
