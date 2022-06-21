@@ -1,3 +1,4 @@
+from datetime import datetime
 from distutils.command.upload import upload
 from django.db import models
 from django.contrib.auth.models import User
@@ -47,29 +48,14 @@ class Patient(models.Model):
 class Appointment(models.Model):
     patient=models.ForeignKey(Patient,on_delete=models.CASCADE,null=True,blank=True)
     doctor=models.ForeignKey(Doctor,on_delete=models.CASCADE,null=True,blank=True)
-    appointmentDate=models.DateField(auto_now=True)
+    appointmentDate=models.DateTimeField(default=datetime.now)
     description=models.TextField(max_length=500)
     status=models.BooleanField(default=False)
 
     def __str__(self):
         return "{} {}".format(self.patient.user.first_name,self.doctor.user.first_name)
 
-class PatientDischargeDetails(models.Model):
-    patient=models.ForeignKey(Patient,on_delete=models.CASCADE,null=True,blank=True)
-    assignedDoctor=models.ForeignKey(Doctor,on_delete=models.CASCADE,null=True,blank=True)
-    address = models.CharField(max_length=40)
-    mobile = models.CharField(max_length=20,null=True)
-    symptoms = models.CharField(max_length=100,null=True)
 
-    admitDate=models.DateField(null=False)
-    releaseDate=models.DateField(null=False)
-    daySpent=models.PositiveIntegerField(null=False)
-
-    roomCharge=models.PositiveIntegerField(null=False)
-    medicineCost=models.PositiveIntegerField(null=False)
-    doctorFee=models.PositiveIntegerField(null=False)
-    OtherCharge=models.PositiveIntegerField(null=False)
-    total=models.PositiveIntegerField(null=False)
 
 
 
