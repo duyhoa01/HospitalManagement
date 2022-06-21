@@ -1,0 +1,278 @@
+{% extends 'hospital/patient_base.html' %}
+{% load static %}
+
+
+{% block content %}
+
+<head>
+    <style>
+        .dashboard{
+            position: relative;
+            left: 250px;
+            background-color: var(--panel-color);
+            min-height: 100vh;
+            width: calc(100% - 250px);
+            padding: 10px 14px;
+            transition: var(--tran-05);
+        }
+        nav.close ~ .dashboard{
+            left: 73px;
+            width: calc(100% - 73px);
+        }
+        .dashboard .top{
+            position: fixed;
+            top: 0;
+            left: 250px;
+            display: flex;
+            width: calc(100% - 250px);
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 14px;
+            background-color: var(--panel-color);
+            transition: var(--tran-05);
+            z-index: 10;
+        }
+        nav.close ~ .dashboard .top{
+            left: 73px;
+            width: calc(100% - 73px);
+        }
+        .dashboard .top .sidebar-toggle{
+            font-size: 26px;
+            color: var(--text-color);
+            cursor: pointer;
+        }
+        
+        
+        .dashboard .dash-content{
+            padding-top: 50px;
+        }
+        .dash-content .title{
+            display: flex;
+            align-items: center;
+            margin: 60px 0 30px 0;
+        }
+        .dash-content .title i{
+            position: relative;
+            height: 35px;
+            width: 35px;
+            background-color: var(--primary-color);
+            border-radius: 6px;
+            color: var(--title-icon-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        .dash-content .title .text{
+            font-size: 24px;
+            font-weight: 500;
+            color: var(--text-color);
+            margin-left: 10px;
+        }
+        .dash-content .boxes{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        .dash-content .boxes .box{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border-radius: 12px;
+            width: calc(100% / 2 - 40px);
+            padding: 40px 20px;
+            background-color: var(--box1-color);
+            transition: var(--tran-05);
+            margin: 20px;
+        }
+        .boxes .box img{
+            font-size: 35px;
+            color: var(--text-color);
+        }
+        .boxes .box .text{
+            white-space: nowrap;
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+        .boxes .box .number{
+            font-size: 40px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+        .boxes .box.box2{
+            background-color: var(--box2-color);
+        }
+        .boxes .box.box3{
+            background-color: var(--box3-color);
+        }
+        .boxes .box.box4{
+            background-color: var(--box1-color);
+        }
+        .dash-content .activity .activity-data{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+        .activity .activity-data{
+            display: flex;
+        }
+        .activity-data .data{
+            display: flex;
+            flex-direction: column;
+            margin: 0 15px;
+        }
+        .activity-data .data-title{
+            font-size: 20px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+        .activity-data .data .data-list{
+            font-size: 18px;
+            font-weight: 400;
+            margin-top: 20px;
+            white-space: nowrap;
+            color: var(--text-color);
+        }
+        @media (max-width: 1000px) {
+        
+            nav ~ .dashboard{
+                left: 73px;
+                width: calc(100% - 73px);
+            }
+            nav.close ~ .dashboard{
+                left: 250px;
+                width: calc(100% - 250px);
+            }
+            nav ~ .dashboard .top{
+                left: 73px;
+                width: calc(100% - 73px);
+            }
+            nav.close ~ .dashboard .top{
+                left: 250px;
+                width: calc(100% - 250px);
+            }
+            .activity .activity-data{
+                overflow-X: scroll;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .dash-content .boxes .box{
+                width: 100% ;
+            }
+        }
+        @media (max-width: 400px) {
+            nav{
+                width: 0px;
+            }
+            nav.close{
+                width: 73px;
+            }
+            nav .logo_name{
+                opacity: 0;
+                pointer-events: none;
+            }
+            nav.close .logo_name{
+                opacity: 0;
+                pointer-events: none;
+            }
+            nav li a .link-name{
+                opacity: 0;
+                pointer-events: none;
+            }
+            nav.close li a .link-name{
+                opacity: 0;
+                pointer-events: none;
+            }
+            nav ~ .dashboard{
+                left: 0;
+                width: 100%;
+            }
+            nav.close ~ .dashboard{
+                left: 73px;
+                width: calc(100% - 73px);
+            }
+            nav ~ .dashboard .top{
+                left: 0;
+                width: 100%;
+            }
+            nav.close ~ .dashboard .top{
+                left: 0;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<section class="dashboard">
+    <div class="top">
+
+        <i class="uil uil-bars sidebar-toggle"></i>
+        
+    </div>
+
+    <div class="dash-content">
+        <div class="overview">
+            <div class="title">
+                <i class="uil uil-tachometer-fast-alt"></i>
+                <span class="text">Appoinment</span>
+            </div>
+
+            <div class="boxes">
+                <div class="box box1">
+                    <a href="/patient-view-appointment">
+                        <span class="text">View Your Appointment</span>
+                    </a>
+                    <img src="{% static 'images/calender.png' %}" width="50" height="50">  
+                </div>
+                <div class="box box2">  
+                    <a href="/patient-book-appointment">
+                        <span class="text">Book Appointment</span>
+                    </a>        
+                    <img src="{% static 'images/checklist.png' %}" width="50" height="50">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    const body = document.querySelector("body"),
+    modeToggle = body.querySelector(".mode-toggle");
+    sidebar = body.querySelector("nav");
+    sidebarToggle = body.querySelector(".sidebar-toggle");
+
+    let getMode = localStorage.getItem("mode");
+    if(getMode && getMode ==="dark"){
+        body.classList.toggle("dark");
+    }
+
+    let getStatus = localStorage.getItem("status");
+    if(getStatus && getStatus ==="close"){
+        sidebar.classList.toggle("close");
+    }
+
+    modeToggle.addEventListener("click", () =>{
+        body.classList.toggle("dark");
+        if(body.classList.contains("dark")){
+            localStorage.setItem("mode", "dark");
+        }else{
+            localStorage.setItem("mode", "light");
+        }
+    });
+
+    sidebarToggle.addEventListener("click", () => {
+        sidebar.classList.toggle("close");
+        if(sidebar.classList.contains("close")){
+            localStorage.setItem("status", "close");
+        }else{
+            localStorage.setItem("status", "open");
+        }
+    })
+
+</script>
+
+{% endblock %}
