@@ -82,6 +82,13 @@
     <div class="top">
 
         <i class="uil uil-bars sidebar-toggle"></i>
+
+        <form>
+            <input class="inputsearch" type="text" placeholder="Search here..." name="keyword" value="{{ keyword | default:'' }}">
+            <input class="btn btn-primary" type="submit" value="Search">
+        </form>
+
+        <img src="images/profile.jpg" alt="">
         
     </div>
     <div class="dash-content">
@@ -109,30 +116,30 @@
                         <td>{{p.symptoms}}</td>
                         <td>{{p.mobile}}</td>
                         <td>{{p.address}}</td>
-                        <td><a class="btn btn-primary btn-xs" href="#"><span class="glyphicon glyphicon-edit"></span></a></td>
-                        <td><a class="btn btn-danger btn-xs" href="#"></span></a></td>
+                        <td><a class="btn btn-primary btn-xs" href="{% url 'admin-update-patient' p.id  %}"><span class="glyphicon glyphicon-edit"></span></a></td>
+                        <td><a class="btn btn-danger btn-xs" href="{% url 'admin-patient-delete' p.id  %}"><span class="glyphicon glyphicon-trash"></span></a></td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
 
-            <!-- <div class="pagination">
+            <div class="pagination">
                 <span class="step-links">
-                    {% if doctors.has_previous %}
-                        <a href="?page={{ doctors.previous_page_number }}">Previous</a>
+                    {% if patients.has_previous %}
+                        <a href="?page={{ patients.previous_page_number }}&keyword={{ keyword | default:'' }}">Previous</a>
                     {% endif %}
                 </span>
              
                 <span class="current">
-                    Page {{ doctors.number }} of {{ doctors.paginator.num_pages }}.
+                    Page {{ patients.number }} of {{ patients.paginator.num_pages }}.
                 </span>
                  
                 <span>
-                    {% if doctors.has_next %}
-                        <a href="?page={{ doctors.next_page_number }}">Next</a>
+                    {% if patients.has_next %}
+                        <a href="?page={{ patients.next_page_number }}&keyword={{ keyword | default:'' }}">Next</a>
                     {% endif %}
                 </span>
-            </div> -->
+            </div>
 
         </div>
     </div>

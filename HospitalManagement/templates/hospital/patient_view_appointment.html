@@ -267,6 +267,7 @@
                     <th>Mobile</th>
                     <th>Address</th>
                     <th>Appointment Date</th>
+                    <th>delete</th>
 
                   </tr>
                 </thead>
@@ -277,6 +278,7 @@
                   <td>{{a.doctor.mobile}}</td>
                   <td>{{a.doctor.address}}</td>
                   <td>{{a.appointmentDate}}</td>
+                  <td><a class="btn btn-danger btn-xs" href="{% url 'patient-delete-appointment' a.id  %}"> delete</a></td>
                 </tr>
                 {% endfor %}
               </table>

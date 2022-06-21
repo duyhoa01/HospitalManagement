@@ -11,7 +11,7 @@
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
     <style>
-        .dashboard{
+         .dashboard{
             position: relative;
             left: 250px;
             background-color: var(--panel-color);
@@ -46,6 +46,40 @@
             color: var(--text-color);
             cursor: pointer;
         }
+        .dashboard .top .search-box{
+            position: relative;
+            height: 45px;
+            max-width: 600px;
+            width: 100%;
+            margin: 0 30px;
+        }
+        .top .search-box input{
+            position: absolute;
+            border: 1px solid var(--border-color);
+            background-color: var(--panel-color);
+            padding: 0 25px 0 50px;
+            border-radius: 5px;
+            height: 100%;
+            /* width: 100%; */
+            color: var(--text-color);
+            font-size: 15px;
+            font-weight: 400;
+            outline: none;
+        }
+        .top .search-box i{
+            position: absolute;
+            left: 15px;
+            font-size: 22px;
+            z-index: 10;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--black-light-color);
+        }
+        .top img{
+            width: 40px;
+            border-radius: 50%;
+        }
+        
         
         
         .dashboard .dash-content{
@@ -79,9 +113,17 @@
 </head>
 
 <section class="dashboard">
+
     <div class="top">
 
         <i class="uil uil-bars sidebar-toggle"></i>
+
+        <form>
+                <input class="inputsearch" type="text" placeholder="Search here..." name="keyword" value="{{ keyword | default:'' }}">
+                <input class="btn btn-primary" type="submit" value="Search">
+        </form>
+        
+        <img src="images/profile.jpg" alt="">
         
     </div>
     <div class="dash-content">
@@ -119,7 +161,7 @@
             <div class="pagination">
                 <span class="step-links">
                     {% if doctors.has_previous %}
-                        <a href="?page={{ doctors.previous_page_number }}">Previous</a>
+                        <a href="?page={{ doctors.previous_page_number }}&keyword={{ keyword | default:'' }}">Previous</a>
                     {% endif %}
                 </span>
              
@@ -129,7 +171,7 @@
                  
                 <span>
                     {% if doctors.has_next %}
-                        <a href="?page={{ doctors.next_page_number }}">Next</a>
+                        <a href="?page={{ doctors.next_page_number }}&keyword={{ keyword | default:'' }}">Next</a>
                     {% endif %}
                 </span>
             </div>

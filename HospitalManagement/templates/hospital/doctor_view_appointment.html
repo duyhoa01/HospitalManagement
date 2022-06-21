@@ -281,6 +281,23 @@
                 {% endfor %}
               </table>
             </div>
+            <div class="pagination">
+                <span class="step-links">
+                    {% if appointments.has_previous %}
+                        <a href="?page={{ appointments.previous_page_number }}">Previous</a>
+                    {% endif %}
+                </span>
+             
+                <span class="current">
+                    Page {{ appointments.number }} of {{ appointments.paginator.num_pages }}.
+                </span>
+                 
+                <span>
+                    {% if appointments.has_next %}
+                        <a href="?page={{ appointments.next_page_number }}">Next</a>
+                    {% endif %}
+                </span>
+            </div>
           </div>
 </section>
 <script>
