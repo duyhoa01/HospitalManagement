@@ -448,7 +448,7 @@ def admin_appointment_record_view(request):
             appointments=models.Appointment.objects.all().filter(status=True, patient__user__first_name__contains=keyword)
     else :
         appointments=models.Appointment.objects.all().filter(status=True)
-    return render(request,'hospital/admin_appointment_record.html',{'appointments':appointments})
+    return render(request,'hospital/admin_appointment_record.html',{'appointments':appointments,'keyword':keyword,'sort':sort})
 
 @login_required(login_url='adminlogin')
 @user_passes_test(is_admin)
