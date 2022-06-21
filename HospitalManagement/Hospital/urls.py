@@ -22,4 +22,27 @@ urlpatterns = [
     path('admin-doctor-approve', admin_doctor_approve_view,name='admin-doctor-approve'),
     path('admin-approve-doctor/<int:pk>', admin_approve_doctor_view,name='admin-approve-doctor'),
     path('admin-doctor-reject/<int:pk>',admin_reject_doctor_view,name='admin-doctor-reject'),
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    path('doctor-dashoard',doctor_dashoard_view,name='doctor-dashoard'),
+    path('doctor-view-patient',doctor_view_patient,name='doctor-view-patient'),
+    path('doctor-view-appointment',doctor_view_appointment,name='doctor-view-appointment'),
+    path('delete-appointment/<int:pk>', delete_appointment_view,name='delete-appointment'),
+
+    
 ]
