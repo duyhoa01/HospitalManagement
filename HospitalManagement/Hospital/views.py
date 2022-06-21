@@ -132,10 +132,15 @@ def admin_doctor_view(request):
 @login_required(login_url='login')
 @user_passes_test(is_admin)
 def admin_doctor_record_view(request):
-    dotors=models.Doctor.objects.all().filter(status=True).order_by('department')
-    for d in dotors:
-        print(d.user)
-    paginator = Paginator(dotors, 4)
+    keyword = request.GET.get('keyword')
+    print(keyword)
+    if keyword:
+        dotors=models.Doctor.objects.all().filter(status=True, user__first_name__contains=keyword).order_by('user_id')
+    else:
+        dotors=models.Doctor.objects.all().filter(status=True,).order_by('user_id')
+    # for d in dotors:
+    #     print(d.user)
+    paginator = Paginator(dotors, 3)
   
     pageNumber = request.GET.get('page')
     print(pageNumber)
@@ -151,7 +156,7 @@ def admin_doctor_record_view(request):
     print(customers)
     # for d in customers:
     #     print(d.user)
-    return render(request, 'hospital/admin_doctor_record.html', {'doctors':customers})
+    return render(request, 'hospital/admin_doctor_record.html', {'doctors':customers,'keyword': keyword,})
     
 
 @login_required(login_url='adminlogin')
@@ -249,8 +254,55 @@ def admin_patient_view(request):
 @login_required(login_url='adminlogin')
 @user_passes_test(is_admin)
 def admin_patient_record_view(request):
-    patients=models.Patient.objects.all().filter(status=True)
-    return render(request,'hospital/admin_patient_record.html',{'patients':patients})
+    keyword = request.GET.get('keyword')
+    print(keyword)
+    if keyword:
+        patients=models.Patient.objects.all().filter(status=True, user__first_name__contains=keyword ).order_by('user_id')
+    else:
+        patients=models.Patient.objects.all().filter(status=True).order_by('user_id')
+    paginator = Paginator(patients, 6)
+    pageNumber = request.GET.get('page')
+    print(pageNumber)
+    try:
+        print(0)
+        customers = paginator.page(pageNumber)
+    except PageNotAnInteger:
+        print(1)
+        customers = paginator.page(1)
+    except EmptyPage:
+        print(2)
+        customers = paginator.page(paginator.num_pages)
+    return render(request,'hospital/admin_patient_record.html',{'patients':customers,'keyword': keyword,})
+
+@login_required(login_url='login')
+@user_passes_test(is_admin)
+def admin_update_patient_view(request,pk):
+    patient=models.Patient.objects.get(id=pk)
+    user=models.User.objects.get(id=patient.user_id)
+
+    userForm=forms.PatientUserForm(request.POST or None,instance=user)
+    patientForm=forms.PatientForm(request.POST or None,instance=patient)
+    mydict={'userForm':userForm,'patientForm':patientForm}
+    if request.method=='POST':
+        if userForm.is_valid() and patientForm.is_valid():
+            user=userForm.save()
+            user.set_password(user.password)
+            user.save()
+            patient=patientForm.save(commit=False)
+            patient.status=True
+            patient.assignedDoctorId=request.POST.get('assignedDoctorId')
+            patient.save()
+            return redirect('admin-patient-record')
+    return render(request,'hospital/admin_patient_update.html',context=mydict)
+
+@login_required(login_url='login')
+@user_passes_test(is_admin)
+def admin_delete_patientl_view(request,pk):
+    patient=models.Patient.objects.get(id=pk)
+    user=models.User.objects.get(id=patient.user_id)
+    user.delete()
+    patient.delete()
+    return redirect('admin-patient-record')
 
 
 @login_required(login_url='adminlogin')
@@ -310,7 +362,15 @@ def admin_appointment_view(request):
 @login_required(login_url='adminlogin')
 @user_passes_test(is_admin)
 def admin_appointment_record_view(request):
-    appointments=models.Appointment.objects.all().filter(status=True)
+    keyword = request.GET.get('keyword')
+    sort=request.GET.get('sort')
+    if keyword and sort:
+        if sort == 'doctor':
+            appointments=models.Appointment.objects.all().filter(status=True, doctor__user__first_name__contains=keyword)
+        else:
+            appointments=models.Appointment.objects.all().filter(status=True, patient__user__first_name__contains=keyword)
+    else :
+        appointments=models.Appointment.objects.all().filter(status=True)
     return render(request,'hospital/admin_appointment_record.html',{'appointments':appointments})
 
 @login_required(login_url='adminlogin')

@@ -27,11 +27,13 @@ urlpatterns = [
 
 
     path('admin-patient',admin_patient_view,name='admin-patient'),
-    path('admin-patient-record',admin_patient_record_view,name='admin-patient_record'),
+    path('admin-patient-record',admin_patient_record_view,name='admin-patient-record'),
     path('admin-patient-add',admin_patient_add_view,name='admin-patient-add'),
     path('admin-patient-approve',admin_patient_approve_view,name='admin-patient-approve'),
     path('admin-approve-patient/<int:pk>', admin_approve_patient_view,name='admin-approve-patient'),
     path('admin-reject-patient/<int:pk>', admin_reject_patient_view,name='admin-reject-patient'),
+    path('admin-patient-delete/<int:pk>',admin_delete_patientl_view,name='admin-patient-delete'),
+    path('admin-update-patient/<int:pk>',admin_update_patient_view,name='admin-update-patient'),
 
     path('admin-appointment', admin_appointment_view,name='admin-appointment'),
     path('admin-appointment-record', admin_appointment_record_view,name='admin-appointment-record'),
