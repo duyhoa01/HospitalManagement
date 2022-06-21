@@ -78,8 +78,7 @@ def afterlogin_view(request):
     elif is_patient(request.user):
         accountapproval=models.Patient.objects.all().filter(user_id=request.user.id,status=True)
         if accountapproval:
-            # return redirect('patient-dashboard')
-            return HttpResponse("Patient")
+            return redirect('patient-dashboard')
         else:
             # return render(request,'hospital/patient_wait_for_approval.html')
             return HttpResponse("Patient Cho Xet")
@@ -202,4 +201,68 @@ def admin_reject_doctor_view(request,pk):
     doctor.delete()
     return redirect('admin-doctor-approve')
 
+#-----------------------PATIENT--------------------#
+@login_required(login_url='login')
+@user_passes_test(is_patient)
+def patient_dashboard_view(request):
+    patient=models.Patient.objects.get(user_id=request.user.id)
+    doctor= patient.assignedDoctor
+    if(doctor != None):
+        mydict={
+        'patient':patient,
+        'doctorName':doctor.get_name,
+        'doctorMobile':doctor.mobile,
+        'doctorAddress':doctor.address,
+        'symptoms':patient.symptoms,
+        'doctorDepartment':doctor.department,
+        'admitDate':patient.admitDate,
+        }
+    else :
+        mydict={
+        'patient':patient,
+        'doctorName': 'Node',
+        'doctorMobile': 'Node',
+        'doctorAddress': 'Node',
+        'symptoms':patient.symptoms,
+        'doctorDepartment': 'Node',
+        'admitDate':patient.admitDate,
+        }
+    return render(request,'hospital/patient_dashboard.html',context=mydict)
 
+@login_required(login_url='login')
+@user_passes_test(is_patient)
+def patient_appointment_view(request):
+    patient=models.Patient.objects.get(user_id=request.user.id) 
+    return render(request,'hospital/patient_appointment.html',{'patient':patient})
+
+@login_required(login_url='login')
+@user_passes_test(is_patient)
+def patient_view_appointment(request):
+    patient = models.Patient.objects.get(user_id=request.user.id)
+    print(patient)
+    appointments= patient.appointment_set.filter(status=True)
+    return render(request,'hospital/patient_view_appointment.html',{'appointments':appointments})
+
+login_required(login_url='patientlogin')
+@user_passes_test(is_patient)
+def patient_book_appointment_view(request):
+    appointmentForm=forms.PatientAppointmentForm()
+    patient=models.Patient.objects.get(user_id=request.user.id) #for profile picture of patient in sidebar
+    message=None
+    mydict={'appointmentForm':appointmentForm,'patient':patient,'message':message}
+    if request.method=='POST':
+        appointmentForm=forms.PatientAppointmentForm(request.POST)
+        if appointmentForm.is_valid():
+            # print(request.POST.get('doctorId'))
+            # desc=request.POST.get('description')
+
+            # doctor=models.Doctor.objects.get(user_id=request.POST.get('doctorId'))
+            appointment=appointmentForm.save(commit=False)
+            appointment.doctorId=request.POST.get('doctorId')
+            appointment.patientId=request.user.id
+            appointment.doctorName=models.User.objects.get(id=request.POST.get('doctorId')).first_name
+            appointment.patientName=request.user.first_name
+            appointment.status=False
+            appointment.save()
+        return HttpResponseRedirect('patient-view-appointment')
+    return render(request,'hospital/patient_book_appointment.html',context=mydict)

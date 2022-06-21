@@ -22,4 +22,9 @@ urlpatterns = [
     path('admin-doctor-approve', admin_doctor_approve_view,name='admin-doctor-approve'),
     path('admin-approve-doctor/<int:pk>', admin_approve_doctor_view,name='admin-approve-doctor'),
     path('admin-doctor-reject/<int:pk>',admin_reject_doctor_view,name='admin-doctor-reject'),
+    
+    path('patient-dashboard',patient_dashboard_view,name='patient-dashboard'),
+    path('patient-appointment',patient_appointment_view,name='patient-appointment-view'),
+    path('patient-view-appointment',patient_view_appointment,name='patient-view-appointment'),
+    path('patient-book-appointment',patient_book_appointment_view,name='patient-book-appointment'),
 ]
