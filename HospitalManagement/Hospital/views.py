@@ -75,7 +75,7 @@ def afterlogin_view(request):
         accountapproval=models.Doctor.objects.all().filter(user_id=request.user.id,status=True)
         if accountapproval:
             return redirect('doctor-dashoard')
-            # return HttpResponse("Doctor")
+            
         else:
             return render('login')
           
@@ -198,9 +198,8 @@ def doctor_view_appointment(request):
 def delete_appointment_view(request,pk):
     appointment=models.Appointment.objects.get(id=pk)
     appointment.delete()
-    doctor=models.Doctor.objects.filter(user=request.user)
-    appointments=doctor[0].appointment_set.filter(status=True)
-    return render(request,'hospital/doctor_view_appointment.html',{'appointments':appointments,'doctor':doctor})
+    
+    return render('doctor-view-appointment')
 
 @login_required(login_url='doctorlogin')
 @user_passes_test(is_doctor)
