@@ -8,4 +8,3 @@ admin.site.register(Patient)
 admin.site.register(Department)
 admin.site.register(Appointment)
 
-

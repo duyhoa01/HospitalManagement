@@ -6,6 +6,9 @@
 {% block content %}
 
 <head>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
     <style>
 
         .dashboard{
@@ -77,6 +80,9 @@
         font-weight: 500;
         margin-left: 10px;
         }
+        .input-box.button{
+           
+        }
         .input-box.button input{
         color: #fff;
         letter-spacing: 1px;
@@ -109,7 +115,7 @@
         <i class="uil uil-bars sidebar-toggle"></i>
         
     </div>
-    <form  method="post" enctype="multipart/form-data">
+    <form  method="post" >
         {% csrf_token %}
 
                 <div class="input-box">
@@ -124,6 +130,7 @@
                 <div class="input-box">
                     {% render_field userForm.password class="form-control" placeholder="Password" %}
                 </div>
+               
                 <div class="input-box">
                     {% render_field doctorForm.department class="form-control" placeholder="Department" %}
                 </div>
@@ -133,9 +140,7 @@
                 <div class="input-box">
                     {% render_field doctorForm.mobile class="form-control"  placeholder="Mobile" %}
                 </div>
-                <div class="input-box">
-                    {% render_field doctorForm.profile_pic required="required" class="form-control" placeholder="Profile Picture" %}
-                </div>
+            
 
        
        <div class="input-box button">

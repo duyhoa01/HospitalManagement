@@ -112,32 +112,28 @@
     <form  method="post" enctype="multipart/form-data">
         {% csrf_token %}
 
+                
                 <div class="input-box">
-                 {% render_field userForm.first_name class="form-control" placeholder="First Name" %}
+                    {% render_field appointmentForm.doctor class="form-control" placeholder="doctor" %}
                 </div>
                 <div class="input-box">
-                    {% render_field userForm.last_name class="form-control" placeholder="Last Name" %}
+                    {% render_field appointmentForm.patient class="form-control" placeholder="patient" %}
                 </div>
                 <div class="input-box">
-                    {% render_field userForm.username class="form-control" placeholder="Username" %}
+                    {% render_field appointmentForm.appointmentDate class="form-control" placeholder="appointmentDate" %}
                 </div>
                 <div class="input-box">
-                    {% render_field userForm.password class="form-control" placeholder="Password" %}
+                    {% render_field appointmentForm.description class="form-control" placeholder="Description" %}
                 </div>
-                <div class="input-box">
-                    {% render_field doctorForm.department class="form-control" placeholder="Department" %}
-                </div>
-                <div class="input-box">
-                     {% render_field doctorForm.address class="form-control" placeholder="Address" %}
-                </div>
-                <div class="input-box">
-                    {% render_field doctorForm.mobile class="form-control"  placeholder="Mobile" %}
-                </div>
-                <div class="input-box">
-                    {% render_field doctorForm.profile_pic required="required" class="form-control" placeholder="Profile Picture" %}
-                </div>
+                
+                
+                
 
-       
+       <br>
+       <br>
+       <br>
+       <br>
+       <br>
        <div class="input-box button">
          <input type="Submit" value="Apply Now">
        </div>
