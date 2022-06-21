@@ -224,14 +224,16 @@ def patient_view_appointment_view(request,pk):
     return render(request,'hospital/doctor_view_appointment.html',{'appointments':appointments,'doctor':doctor})
     # print(appointments)
     # return HttpResponse("Patient Cho Xet")
-
+#-------------------ADMIN--------------#
 @login_required(login_url='login')
 @user_passes_test(is_admin)
 def admin_doctor_record_view(request):
-    dotors=models.Doctor.objects.all().filter(status=True).order_by('department')
-    for d in dotors:
-        print(d.user)
-    paginator = Paginator(dotors, 4)
+    keyword = request.GET.get('keyword')  
+    if keyword:
+        dotors=models.Doctor.objects.all().filter(status=True, user__first_name__icontains=keyword).order_by('user_id')
+    else:
+        dotors=models.Doctor.objects.all().filter(status=True).order_by('user_id')
+    paginator = Paginator(dotors, 6)
   
     pageNumber = request.GET.get('page')
     print(pageNumber)
@@ -245,9 +247,7 @@ def admin_doctor_record_view(request):
         print(2)
         customers = paginator.page(paginator.num_pages)
     print(customers)
-    # for d in customers:
-    #     print(d.user)
-    return render(request, 'hospital/admin_doctor_record.html', {'doctors':customers})
+    return render(request, 'hospital/admin_doctor_record.html', {'doctors':customers,'keyword':keyword})
     
 
 @login_required(login_url='login')
@@ -286,15 +286,7 @@ def admin_update_doctor_view(request,pk):
     doctorForm=forms.DoctorForm(request.POST or None,instance=doctor)
     mydict={'userForm':userForm,'doctorForm':doctorForm}
     if request.method=='POST':
-        print("post")
-        # userForm=forms.DoctorUserForm(request.POST)
-        # doctorForm=forms.DoctorForm(request.POST)
-        if userForm.is_valid():
-            print(" u valid")
-        if doctorForm.is_valid():
-            print(" d valid")
-        if userForm.is_valid() and doctorForm.is_valid():
-            
+        if userForm.is_valid() and doctorForm.is_valid():  
             user=userForm.save()
             user.set_password(user.password)
             user.save()
@@ -346,8 +338,25 @@ def admin_patient_view(request):
 @login_required(login_url='login')
 @user_passes_test(is_admin)
 def admin_patient_record_view(request):
-    patients=models.Patient.objects.all().filter(status=True)
-    return render(request,'hospital/admin_patient_record.html',{'patients':patients})
+    keyword = request.GET.get('keyword')
+    print(keyword)
+    if keyword:
+        patients=models.Patient.objects.all().filter(status=True, user__first_name__contains=keyword ).order_by('user_id')
+    else:
+        patients=models.Patient.objects.all().filter(status=True).order_by('user_id')
+    paginator = Paginator(patients, 6)
+    pageNumber = request.GET.get('page')
+    print(pageNumber)
+    try:
+        print(0)
+        customers = paginator.page(pageNumber)
+    except PageNotAnInteger:
+        print(1)
+        customers = paginator.page(1)
+    except EmptyPage:
+        print(2)
+        customers = paginator.page(paginator.num_pages)
+    return render(request,'hospital/admin_patient_record.html',{'patients':customers,'keyword': keyword,})
 
 
 @login_required(login_url='login')
@@ -417,8 +426,7 @@ def admin_appointment_record_view(request):
     else :
         appointments=models.Appointment.objects.all().filter(status=True)
     return render(request,'hospital/admin_appointment_record.html',{'appointments':appointments,'keyword':keyword,'sort':sort})
-    # appointments=models.Appointment.objects.all().filter(status=True)
-    # return render(request,'hospital/admin_appointment_record.html',{'appointments':appointments})
+   
 
 @login_required(login_url='login')
 @user_passes_test(is_admin)
@@ -538,7 +546,7 @@ def patient_book_appointment_view(request):
             patient = models.Patient.objects.get(user_id=request.user.id)
             appointment=appointmentForm.save(commit=False)
             appointment.patient = patient
-            appointment.status=True
+            appointment.status=False
             appointment.save()
         return HttpResponseRedirect('patient-view-appointment')
     return render(request,'hospital/patient_book_appointment.html',context=mydict)
