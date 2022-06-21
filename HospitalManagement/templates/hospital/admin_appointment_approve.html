@@ -93,46 +93,27 @@
 
             <table class="table table-striped table hover">
                 <theah>
-                    <th>Name</th>
-                    <th>Profile Picture</th>
-                    <th>Mobile</th>
-                    <th>Address</th>
-                    <th>Department</th>
-                    <th>Update</th>
-                    <th>Delete</th>
+                    <th>Doctor Name</th>
+                    <th>Patient Name</th>
+                    <th>Description</th>
+                    <th>Date</th>
+                    <th>Approve</th>
+          <th>Reject</th>
                 </theah>
                 <tbody>
-                    {% for d in doctors %}
+                    {% for a in appointments %}
                     <tr>
-                        <td> {{d.get_name}}</td>
-                        <td> <img src="{% static d.profile_pic.url %}" alt="Profile Pic" height="40px" width="40px" /></td>
-                        <td>{{d.mobile}}</td>
-                        <td>{{d.address}}</td>
-                        <td>{{d.department}}</td>
-                        <td><a class="btn btn-primary btn-xs" href="{% url 'admin-update-doctor' d.id  %}"><span class="glyphicon glyphicon-edit"></span></a></td>
-                        <td><a class="btn btn-danger btn-xs" href="{% url 'admin-delete-doctor' d.id  %}"><span class="glyphicon glyphicon-trash"></span></a></td>
+                        <td> {{a.doctor.user.first_name}}</td>
+                        <td>{{a.patient.user.first_name}}</td>
+                        <td>{{a.description}}</td>
+                        <td>{{a.appointmentDate}}</td>
+                        <td><a class="btn btn-primary btn-xs" href="{% url 'admin-approve-appointment' a.id  %}"><span class="glyphicon glyphicon-ok"></span></a></td>
+                        <td><a class="btn btn-danger btn-xs" href="{% url 'admin-reject-appointment' a.id  %}"><span class="glyphicon glyphicon-trash"></span></a></td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
 
-            <div class="pagination">
-                <span class="step-links">
-                    {% if doctors.has_previous %}
-                        <a href="?page={{ doctors.previous_page_number }}">Previous</a>
-                    {% endif %}
-                </span>
-             
-                <span class="current">
-                    Page {{ doctors.number }} of {{ doctors.paginator.num_pages }}.
-                </span>
-                 
-                <span>
-                    {% if doctors.has_next %}
-                        <a href="?page={{ doctors.next_page_number }}">Next</a>
-                    {% endif %}
-                </span>
-            </div>
 
         </div>
     </div>

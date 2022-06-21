@@ -17,7 +17,7 @@ urlpatterns = [
 
     path('admin-dashboard',admin_dashboard_view,name='admin-dashboard'),
     path('admin-doctor', admin_doctor_view,name='admin-doctor'),
-    path('admin-doctor-record', admin_doctor_record_view,name='admin-record-doctor'),
+    path('admin-doctor-record', admin_doctor_record_view,name='admin-doctor-record'),
     path('admin-doctor-add', admin_doctor_add_view,name='admin_doctor_add_view'),
     path('admin-doctor-approve', admin_doctor_approve_view,name='admin-doctor-approve'),
     path('admin-approve-doctor/<int:pk>', admin_approve_doctor_view,name='admin-approve-doctor'),
@@ -27,4 +27,32 @@ urlpatterns = [
     path('patient-appointment',patient_appointment_view,name='patient-appointment-view'),
     path('patient-view-appointment',patient_view_appointment,name='patient-view-appointment'),
     path('patient-book-appointment',patient_book_appointment_view,name='patient-book-appointment'),
+    path('patient-view-doctor', patient_doctor_record_view,name='patient-doctor-record'),
+
+
+
+
+
+    path('doctor-dashoard',doctor_dashoard_view,name='doctor-dashoard'),
+    path('doctor-view-patient',doctor_view_patient,name='doctor-view-patient'),
+    path('doctor-view-appointment',doctor_view_appointment,name='doctor-view-appointment'),
+    path('delete-appointment/<int:pk>', delete_appointment_view,name='delete-appointment'),
+    path('admin-update-doctor/<int:pk>', admin_update_doctor_view,name='admin-update-doctor'),
+    path('admin-delete-doctor/<int:pk>',admin_delete_doctor_view,name='admin-delete-doctor'),
+
+
+    path('admin-patient',admin_patient_view,name='admin-patient'),
+    path('admin-patient-record',admin_patient_record_view,name='admin-patient_record'),
+    path('admin-patient-add',admin_patient_add_view,name='admin-patient-add'),
+    path('admin-patient-approve',admin_patient_approve_view,name='admin-patient-approve'),
+    path('admin-approve-patient/<int:pk>', admin_approve_patient_view,name='admin-approve-patient'),
+    path('admin-reject-patient/<int:pk>', admin_reject_patient_view,name='admin-reject-patient'),
+
+    path('admin-appointment', admin_appointment_view,name='admin-appointment'),
+    path('admin-appointment-record', admin_appointment_record_view,name='admin-appointment-record'),
+    path('admin-appointment-add', admin_appointment_add_view,name='admin-appointment-add'),
+    path('admin-appointment-approve', admin_appointment_approve_view,name='admin-appointment-approve'),
+    path('admin-approve-appointment/<int:pk>', admin_approve_appointment_view,name='admin-approve-appointment'),
+    path('admin-reject-appointment/<int:pk>', admin_reject_appointment_view,name='admin-reject-appointment'),
+
 ]

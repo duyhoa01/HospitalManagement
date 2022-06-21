@@ -248,24 +248,21 @@
                 <!--<img src="images/logo.png" alt="">-->
             </div>
 
-            <span class="logo_name">Admin</span>
+            <span class="logo_name">Doctor</span>
         </div>
 
         <div class="menu-items">
             <ul class="nav-links">
-                <li><a href="/admin-dashboard">
+                <li><a href="/doctor-dashoard">
                     <i class="uil uil-estate"></i>
                     <span class="link-name">Dahsboard</span>
                 </a></li>
-                <li><a href="/admin-doctor">
-                    <i class="uil uil-user-md"></i>
-                    <span class="link-name">Doctor</span>
-                </a></li>
-                <li><a href="/admin-patient">
+            
+                <li><a href="doctor-view-patient">
                     <i class="uil uil-accessible-icon-alt"></i>
                     <span class="link-name">Patient</span>
                 </a></li>
-                <li><a href="/admin-appointment">
+                <li><a href="doctor-view-appointment">
                     <i class="uil uil-calendar-alt"></i>
                     <span class="link-name">Appoinment</span>
                 </a></li>
@@ -290,9 +287,8 @@
             </ul>
         </div>
     </nav>
-    <main>
-        {% block content %} replace me {% endblock %}
-    </main>
+
+    {% block content %} replace me {% endblock %}
     
 </body>
 </html>

@@ -1,4 +1,4 @@
-{% extends 'hospital/admin_base.html' %}
+{% extends 'hospital/patient_base.html' %}
 {% load static %}
 
 
@@ -98,8 +98,6 @@
                     <th>Mobile</th>
                     <th>Address</th>
                     <th>Department</th>
-                    <th>Update</th>
-                    <th>Delete</th>
                 </theah>
                 <tbody>
                     {% for d in doctors %}
@@ -109,8 +107,6 @@
                         <td>{{d.mobile}}</td>
                         <td>{{d.address}}</td>
                         <td>{{d.department}}</td>
-                        <td><a class="btn btn-primary btn-xs" href="{% url 'admin-update-doctor' d.id  %}"><span class="glyphicon glyphicon-edit"></span></a></td>
-                        <td><a class="btn btn-danger btn-xs" href="{% url 'admin-delete-doctor' d.id  %}"><span class="glyphicon glyphicon-trash"></span></a></td>
                     </tr>
                     {% endfor %}
                 </tbody>

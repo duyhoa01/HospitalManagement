@@ -11,7 +11,7 @@
 
 <div class="wrapper">
    <h2>Patient Sigup</h2>
-   <form method="post">
+   <form method="post" enctype="multipart/form-data">
       {% csrf_token %}
       <div class="row">
          <div class="col-md-6">
@@ -42,7 +42,7 @@
                 {% render_field patientForm.mobile class="form-control" pattern="[6789][0-9]{9}" placeholder="Mobile Number" %}
               </div>
               <div class="input-box">
-                {% render_field patientForm.assignedDoctorId class="form-control" placeholder="Doctor" %}
+                {% render_field patientForm.assignedDoctor class="form-control" placeholder="Doctor" %}
               </div>
          </div>
       </div>
