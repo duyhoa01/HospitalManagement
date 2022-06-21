@@ -1,0 +1,193 @@
+{% extends 'hospital/admin_base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+
+{% block content %}
+
+<head>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <style>
+
+        .dashboard{
+            position: relative;
+            left: 250px;
+            background-color: var(--panel-color);
+            min-height: 100vh;
+            width: calc(100% - 250px);
+            padding: 10px 14px;
+            transition: var(--tran-05);
+        }
+        nav.close ~ .dashboard{
+            left: 73px;
+            width: calc(100% - 73px);
+        }
+        .dashboard .top{
+            position: fixed;
+            top: 0;
+            left: 250px;
+            display: flex;
+            width: calc(100% - 250px);
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 14px;
+            background-color: var(--panel-color);
+            transition: var(--tran-05);
+            z-index: 10;
+        }
+        nav.close ~ .dashboard .top{
+            left: 73px;
+            width: calc(100% - 73px);
+        }
+        .dashboard .top .sidebar-toggle{
+            font-size: 26px;
+            color: var(--text-color);
+            cursor: pointer;
+        }
+        .dashboard form{
+            margin: 50px 200px;
+        }
+        .dashboard form .input-box{
+        height: 52px;
+        margin: 18px 0;
+        }
+        form .input-box input{
+        height: 100%;
+        width: 100%;
+        outline: none;
+        padding: 0 15px;
+        font-size: 17px;
+        font-weight: 400;
+        color: #333;
+        border: 1.5px solid #C7BEBE;
+        border-bottom-width: 2.5px;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+        }
+        .input-box input:focus,
+        .input-box input:valid{
+        border-color: #4070f4;
+        }
+        form .policy{
+        display: flex;
+        align-items: center;
+        }
+        form h3{
+        color: #707070;
+        font-size: 14px;
+        font-weight: 500;
+        margin-left: 10px;
+        }
+        .input-box.button{
+           
+        }
+        .input-box.button input{
+        color: #fff;
+        letter-spacing: 1px;
+        border: none;
+        background: #4070f4;
+        cursor: pointer;
+        }
+        .input-box.button input:hover{
+        background: #0e4bf1;
+        }
+        form .text h3{
+        color: #333;
+        width: 100%;
+        text-align: center;
+        }
+        form .text h3 a{
+        color: #4070f4;
+        text-decoration: none;
+        }
+        form .text h3 a:hover{
+        text-decoration: underline;
+        }
+
+    </style>
+</head>
+
+<section class="dashboard">
+    <div class="top">
+
+        <i class="uil uil-bars sidebar-toggle"></i>
+        
+    </div>
+    <form  method="post" >
+        {% csrf_token %}
+
+                <div class="input-box">
+                 {% render_field userForm.first_name class="form-control" placeholder="First Name" %}
+                </div>
+                <div class="input-box">
+                    {% render_field userForm.last_name class="form-control" placeholder="Last Name" %}
+                </div>
+                <div class="input-box">
+                    {% render_field userForm.username class="form-control" placeholder="Username" %}
+                </div>
+                <div class="input-box">
+                    {% render_field userForm.password class="form-control" placeholder="Password" %}
+                </div>
+               
+                <div class="input-box">
+                    {% render_field patientForm.mobile class="form-control" placeholder="Mobile" %}
+                </div>
+                <div class="input-box">
+                    {% render_field patientForm.assignedDoctor class="form-control" placeholder="Doctor" %}
+                </div>
+                <div class="input-box">
+                    {% render_field patientForm.address class="form-control" placeholder="Address" %}
+                </div>
+                <div class="input-box">
+                    {% render_field patientForm.symptoms class="form-control" placeholder="Symptoms" %}
+                </div>
+            
+
+       
+       <div class="input-box button">
+         <input type="Submit" value="Update Now">
+       </div>
+       
+     </form>
+</section>
+
+<script>
+    const body = document.querySelector("body"),
+    modeToggle = body.querySelector(".mode-toggle");
+    sidebar = body.querySelector("nav");
+    sidebarToggle = body.querySelector(".sidebar-toggle");
+
+    let getMode = localStorage.getItem("mode");
+    if(getMode && getMode ==="dark"){
+        body.classList.toggle("dark");
+    }
+
+    let getStatus = localStorage.getItem("status");
+    if(getStatus && getStatus ==="close"){
+        sidebar.classList.toggle("close");
+    }
+
+    modeToggle.addEventListener("click", () =>{
+        body.classList.toggle("dark");
+        if(body.classList.contains("dark")){
+            localStorage.setItem("mode", "dark");
+        }else{
+            localStorage.setItem("mode", "light");
+        }
+    });
+
+    sidebarToggle.addEventListener("click", () => {
+        sidebar.classList.toggle("close");
+        if(sidebar.classList.contains("close")){
+            localStorage.setItem("status", "close");
+        }else{
+            localStorage.setItem("status", "open");
+        }
+    })
+
+</script>
+
+
+{% endblock %}

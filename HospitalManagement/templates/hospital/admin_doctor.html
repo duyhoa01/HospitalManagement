@@ -80,7 +80,7 @@
             flex-direction: column;
             align-items: center;
             border-radius: 12px;
-            width: calc(100% / 2 - 40px);
+            width: calc(100% / 3 - 40px);
             padding: 40px 20px;
             background-color: var(--box1-color);
             transition: var(--tran-05);
@@ -223,7 +223,7 @@
 
             <div class="boxes">
                 <div class="box box1">
-                    <a href="/admin-doctor-record?page=1">
+                    <a href="/admin-doctor-record?page=1&keyword=">
                         <span class="text">Doctor Record</span>
                     </a>
                     <img src="{% static 'images/checklist.png' %}" width="50" height="50">  
@@ -240,10 +240,7 @@
                     </a>
                     <img src="{% static 'images/registered.png' %}" width="50" height="50">
                 </div>
-                <div class="box box4">
-                    <span class="text">Doctor Specialistion</span>
-                    <img src="{% static 'images/doctor_2.png' %}" width="50" height="50">
-                </div>
+
             </div>
         </div>
     </div>
