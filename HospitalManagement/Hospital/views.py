@@ -407,8 +407,18 @@ def admin_appointment_view(request):
 @login_required(login_url='adminlogin')
 @user_passes_test(is_admin)
 def admin_appointment_record_view(request):
-    appointments=models.Appointment.objects.all().filter(status=True)
-    return render(request,'hospital/admin_appointment_record.html',{'appointments':appointments})
+    keyword = request.GET.get('keyword')
+    sort=request.GET.get('sort')
+    if keyword and sort:
+        if sort == 'doctor':
+            appointments=models.Appointment.objects.all().filter(status=True, doctor__user__first_name__contains=keyword)
+        else:
+            appointments=models.Appointment.objects.all().filter(status=True, patient__user__first_name__contains=keyword)
+    else :
+        appointments=models.Appointment.objects.all().filter(status=True)
+    return render(request,'hospital/admin_appointment_record.html',{'appointments':appointments,'keyword':keyword,'sort':sort})
+    # appointments=models.Appointment.objects.all().filter(status=True)
+    # return render(request,'hospital/admin_appointment_record.html',{'appointments':appointments})
 
 @login_required(login_url='adminlogin')
 @user_passes_test(is_admin)
