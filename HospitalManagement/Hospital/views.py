@@ -77,8 +77,8 @@ def afterlogin_view(request):
             return redirect('doctor-dashoard')
             # return HttpResponse("Doctor")
         else:
-            # return render(request,'hospital/doctor_wait_for_approval.html')
-            return HttpResponse("Doctor cho xet")
+            return render('login')
+          
     elif is_patient(request.user):
         accountapproval=models.Patient.objects.all().filter(user_id=request.user.id,status=True)
         if accountapproval:
@@ -134,7 +134,7 @@ def admin_doctor_view(request):
     return render(request,'hospital/admin_doctor.html')
 
 
-# DocTOR
+# -------DocTOR----------
 @login_required (login_url='doctorlogin')
 @user_passes_test(is_doctor)
 def doctor_dashoard_view(request):
@@ -150,22 +150,28 @@ def doctor_dashoard_view(request):
 
 
 
-
-
-
-
-
-
-
 @login_required(login_url='adminlogin')
 @user_passes_test(is_doctor)
 def doctor_view_patient(request):
     patients=models.Patient.objects.all().filter(status=True,assignedDoctor__user=request.user)
     doctor=models.Doctor.objects.get(user=request.user)
+    paginator = Paginator(patients, 4)
+  
+    pageNumber = request.GET.get('page')
+    print(pageNumber)
+    try:
+        print(0)
+        customers = paginator.page(pageNumber)
+    except PageNotAnInteger:
+        print(1)
+        customers = paginator.page(1)
+    except EmptyPage:
+        print(2)
+        customers = paginator.page(paginator.num_pages)
+    print(customers)
     
-    return render(request,'hospital/doctor_view_patient.html',{'patients':patients,'doctor':doctor})
+    return render(request,'hospital/doctor_view_patient.html',{'patients':customers,'doctor':doctor})
    
-
 
 
 
@@ -174,7 +180,8 @@ def doctor_view_patient(request):
 def search_view(request):
     doctor=models.Doctor.objects.get(user_id=request.user.id)
     query=request.GET['query']
-    patients=models.Patient.objects.all().filter(status=TRUE,assignedDoctor=request.user.id).filter(Q(symptoms__icontains=query)|Q(user__first_name__icontains=query))
+    # patients=models.Patient.objects.all().filter(status=TRUE,assignedDoctor=request.user.id).filter(Q(symptoms__icontains=query)|Q(user__first_name__icontains=query))
+    patients=models.Patient.objects.all().filter(status=True,assignedDoctor__user=request.user).filter(user__first_name__icontains=query)
     return render(request,'hospital/doctor_view_patient.html',{'patients':patients,'doctor':doctor})
 
 
@@ -195,16 +202,16 @@ def delete_appointment_view(request,pk):
     appointments=doctor[0].appointment_set.filter(status=True)
     return render(request,'hospital/doctor_view_appointment.html',{'appointments':appointments,'doctor':doctor})
 
+@login_required(login_url='doctorlogin')
+@user_passes_test(is_doctor)
+def patient_view_appointment_view(request,pk):
+    patient=models.Patient.objects.get(id=pk)
+    appointments=patient.appointment_set.all()
 
-
-
-
-
-
-
-
-
-
+    doctor=models.Doctor.objects.filter(user=request.user)
+    return render(request,'hospital/doctor_view_appointment.html',{'appointments':appointments,'doctor':doctor})
+    # print(appointments)
+    # return HttpResponse("Patient Cho Xet")
 
 @login_required(login_url='login')
 @user_passes_test(is_admin)

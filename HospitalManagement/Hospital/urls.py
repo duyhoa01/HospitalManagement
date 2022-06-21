@@ -43,10 +43,12 @@ urlpatterns = [
     path('doctor-dashoard',doctor_dashoard_view,name='doctor-dashoard'),
     path('doctor-view-patient',doctor_view_patient,name='doctor-view-patient'),
     path('doctor-view-appointment',doctor_view_appointment,name='doctor-view-appointment'),
+    path('search', search_view,name='search'),
+    path('patient-view-appointment-view/<int:pk>', patient_view_appointment_view,name='patient-view-appointment-view'),
     path('delete-appointment/<int:pk>', delete_appointment_view,name='delete-appointment'),
     path('admin-update-doctor/<int:pk>', admin_update_doctor_view,name='admin-update-doctor'),
     path('admin-delete-doctor/<int:pk>',admin_delete_doctor_view,name='admin-delete-doctor'),
-
+    
 
     path('admin-patient',admin_patient_view,name='admin-patient'),
     path('admin-patient-record',admin_patient_record_view,name='admin-patient_record'),
