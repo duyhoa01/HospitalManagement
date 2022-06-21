@@ -56,8 +56,8 @@ urlpatterns = [
     path('admin-patient-approve',admin_patient_approve_view,name='admin-patient-approve'),
     path('admin-approve-patient/<int:pk>', admin_approve_patient_view,name='admin-approve-patient'),
     path('admin-reject-patient/<int:pk>', admin_reject_patient_view,name='admin-reject-patient'),
-    # path('admin-patient-delete/<int:pk>',admin_delete_patientl_view,name='admin-patient-delete'),
-    # path('admin-update-patient/<int:pk>',admin_update_patient_view,name='admin-update-patient'),
+    path('admin-patient-delete/<int:pk>',admin_delete_patientl_view,name='admin-patient-delete'),
+    path('admin-update-patient/<int:pk>',admin_update_patient_view,name='admin-update-patient'),
 
     path('admin-appointment', admin_appointment_view,name='admin-appointment'),
     path('admin-appointment-record', admin_appointment_record_view,name='admin-appointment-record'),

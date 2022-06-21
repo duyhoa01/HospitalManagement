@@ -190,8 +190,22 @@ def search_view(request):
 def doctor_view_appointment(request):
     doctor=models.Doctor.objects.filter(user=request.user)
     appointments=doctor[0].appointment_set.filter(status=True)
+    paginator = Paginator(appointments, 4)
+  
+    pageNumber = request.GET.get('page')
+    print(pageNumber)
+    try:
+        print(0)
+        customers = paginator.page(pageNumber)
+    except PageNotAnInteger:
+        print(1)
+        customers = paginator.page(1)
+    except EmptyPage:
+        print(2)
+        customers = paginator.page(paginator.num_pages)
+    print(customers)
     
-    return render(request,'hospital/doctor_view_appointment.html',{'appointments':appointments,'doctor':doctor})
+    return render(request,'hospital/doctor_view_appointment.html',{'appointments':customers,'doctor':doctor})
 
 @login_required(login_url='doctorlogin')
 @user_passes_test(is_doctor)
@@ -199,7 +213,7 @@ def delete_appointment_view(request,pk):
     appointment=models.Appointment.objects.get(id=pk)
     appointment.delete()
     
-    return render('doctor-view-appointment')
+    return redirect('doctor-view-appointment')
 
 @login_required(login_url='doctorlogin')
 @user_passes_test(is_doctor)
@@ -432,4 +446,33 @@ def admin_reject_appointment_view(request,pk):
     appointment=models.Appointment.objects.get(id=pk)
     appointment.delete()
     return redirect('admin-appointment-approve')
+@login_required(login_url='login')
+@user_passes_test(is_admin)
+def admin_update_patient_view(request,pk):
+    patient=models.Patient.objects.get(id=pk)
+    user=models.User.objects.get(id=patient.user_id)
+
+    userForm=forms.PatientUserForm(request.POST or None,instance=user)
+    patientForm=forms.PatientForm(request.POST or None,instance=patient)
+    mydict={'userForm':userForm,'patientForm':patientForm}
+    if request.method=='POST':
+        if userForm.is_valid() and patientForm.is_valid():
+            user=userForm.save()
+            user.set_password(user.password)
+            user.save()
+            patient=patientForm.save(commit=False)
+            patient.status=True
+            patient.assignedDoctorId=request.POST.get('assignedDoctorId')
+            patient.save()
+            return redirect('admin-patient-record')
+    return render(request,'hospital/admin_patient_update.html',context=mydict)
+
+@login_required(login_url='login')
+@user_passes_test(is_admin)
+def admin_delete_patientl_view(request,pk):
+    patient=models.Patient.objects.get(id=pk)
+    user=models.User.objects.get(id=patient.user_id)
+    user.delete()
+    patient.delete()
+    return redirect('admin-patient-record')
 
