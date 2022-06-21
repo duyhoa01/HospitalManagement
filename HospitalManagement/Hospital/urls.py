@@ -22,6 +22,28 @@ urlpatterns = [
     path('admin-doctor-approve', admin_doctor_approve_view,name='admin-doctor-approve'),
     path('admin-approve-doctor/<int:pk>', admin_approve_doctor_view,name='admin-approve-doctor'),
     path('admin-doctor-reject/<int:pk>',admin_reject_doctor_view,name='admin-doctor-reject'),
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    path('doctor-dashoard',doctor_dashoard_view,name='doctor-dashoard'),
+    path('doctor-view-patient',doctor_view_patient,name='doctor-view-patient'),
+    path('doctor-view-appointment',doctor_view_appointment,name='doctor-view-appointment'),
+    path('delete-appointment/<int:pk>', delete_appointment_view,name='delete-appointment'),
     path('admin-update-doctor/<int:pk>', admin_update_doctor_view,name='admin-update-doctor'),
     path('admin-delete-doctor/<int:pk>',admin_delete_doctor_view,name='admin-delete-doctor'),
 
@@ -38,7 +60,8 @@ urlpatterns = [
     path('admin-appointment', admin_appointment_view,name='admin-appointment'),
     path('admin-appointment-record', admin_appointment_record_view,name='admin-appointment-record'),
     path('admin-appointment-add', admin_appointment_add_view,name='admin-appointment-add'),
-     path('admin-appointment-approve', admin_appointment_approve_view,name='admin-appointment-approve'),
-     path('admin-approve-appointment/<int:pk>', admin_approve_appointment_view,name='admin-approve-appointment'),
-     path('admin-reject-appointment/<int:pk>', admin_reject_appointment_view,name='admin-reject-appointment'),
+    path('admin-appointment-approve', admin_appointment_approve_view,name='admin-appointment-approve'),
+    path('admin-approve-appointment/<int:pk>', admin_approve_appointment_view,name='admin-approve-appointment'),
+    path('admin-reject-appointment/<int:pk>', admin_reject_appointment_view,name='admin-reject-appointment'),
+
 ]

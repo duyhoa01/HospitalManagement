@@ -1,6 +1,10 @@
+
+from pickle import TRUE
+from django.shortcuts import render, redirect
 from django.shortcuts import render, redirect,reverse
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required,user_passes_test
+from psutil import users
 from . import forms, models
 from django.contrib.auth.models import Group
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -70,8 +74,8 @@ def afterlogin_view(request):
     elif is_doctor(request.user):
         accountapproval=models.Doctor.objects.all().filter(user_id=request.user.id,status=True)
         if accountapproval:
-            # return redirect('doctor-dashboard')
-            return HttpResponse("Doctor")
+            return redirect('doctor-dashoard')
+            # return HttpResponse("Doctor")
         else:
             # return render(request,'hospital/doctor_wait_for_approval.html')
             return HttpResponse("Doctor cho xet")
@@ -128,6 +132,79 @@ def admin_dashboard_view(request):
 @user_passes_test(is_admin)
 def admin_doctor_view(request):
     return render(request,'hospital/admin_doctor.html')
+
+
+# DocTOR
+@login_required (login_url='doctorlogin')
+@user_passes_test(is_doctor)
+def doctor_dashoard_view(request):
+    doctor=models.Doctor.objects.filter(user=request.user)
+    patientcount=doctor[0].patient_set.filter(status=True).count()
+    appointmentcount=doctor[0].appointment_set.filter(status=True).count()
+    mydict={
+    'patientcount':patientcount,
+    'appointmentcount':appointmentcount,
+    'doctor':models.Doctor.objects.get(user=request.user), #for profile picture of doctor in sidebar
+     }
+    return render(request,'hospital/doctor_dashboard.html',context=mydict)
+
+
+
+
+
+
+
+
+
+
+@login_required(login_url='adminlogin')
+@user_passes_test(is_doctor)
+def doctor_view_patient(request):
+    patients=models.Patient.objects.all().filter(status=True,assignedDoctor__user=request.user)
+    doctor=models.Doctor.objects.get(user=request.user)
+    
+    return render(request,'hospital/doctor_view_patient.html',{'patients':patients,'doctor':doctor})
+   
+
+
+
+
+@login_required(login_url='adminlogin')
+@user_passes_test(is_doctor)
+def search_view(request):
+    doctor=models.Doctor.objects.get(user_id=request.user.id)
+    query=request.GET['query']
+    patients=models.Patient.objects.all().filter(status=TRUE,assignedDoctor=request.user.id).filter(Q(symptoms__icontains=query)|Q(user__first_name__icontains=query))
+    return render(request,'hospital/doctor_view_patient.html',{'patients':patients,'doctor':doctor})
+
+
+@login_required(login_url='doctorlogin')
+@user_passes_test(is_doctor)
+def doctor_view_appointment(request):
+    doctor=models.Doctor.objects.filter(user=request.user)
+    appointments=doctor[0].appointment_set.filter(status=True)
+    
+    return render(request,'hospital/doctor_view_appointment.html',{'appointments':appointments,'doctor':doctor})
+
+@login_required(login_url='doctorlogin')
+@user_passes_test(is_doctor)
+def delete_appointment_view(request,pk):
+    appointment=models.Appointment.objects.get(id=pk)
+    appointment.delete()
+    doctor=models.Doctor.objects.filter(user=request.user)
+    appointments=doctor[0].appointment_set.filter(status=True)
+    return render(request,'hospital/doctor_view_appointment.html',{'appointments':appointments,'doctor':doctor})
+
+
+
+
+
+
+
+
+
+
+
 
 @login_required(login_url='login')
 @user_passes_test(is_admin)
@@ -409,3 +486,4 @@ def admin_reject_appointment_view(request,pk):
     appointment=models.Appointment.objects.get(id=pk)
     appointment.delete()
     return redirect('admin-appointment-approve')
+
